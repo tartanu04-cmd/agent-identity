@@ -1,0 +1,7 @@
+https://api.coingecko.com/.well-known/agent.json
+https://mcp.cloudflare.com/.well-known/agent.json
+https://bazaar.x402.org/directory/latest
+https://openrouter.ai/.well-known/agent.json
+https://tavily.com/.well-known/agent.json
+https://agent.market/api/v1/top-performers
+https://rapidclaw.dev/directory/active
