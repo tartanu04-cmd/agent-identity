@@ -4,37 +4,50 @@ on:
     - cron: '*/30 * * * *'
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   pivot:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.12'
 
       - name: Scout and Mirror
         run: |
-          # 1. Fetch current time
+          # 1. Ensure the manifest exists before editing
+          if [ ! -f .well-known/agent.json ]; then
+            echo "Error: .well-known/agent.json not found. Creating a backup."
+            mkdir -p .well-known
+            echo '{"name":"Alpha","specialization":"Ready","last_updated":"2026-01-01"}' > .well-known/agent.json
+          fi
+
+          # 2. Fetch current time
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           
-          # 2. Pick a target from targets.txt (Randomly picks one for variety)
+          # 3. Pick a target
+          if [ ! -f targets.txt ]; then
+            echo "api.coingecko.com" > targets.txt
+          fi
           TARGET_URL=$(shuf -n 1 targets.txt)
-          echo "Scouting $TARGET_URL"
           
-          # 3. Simulate Mirroring (Extracting goal logic)
-          # For now, we update the timestamp and a generic specialization
-          # to ensure the file actually changes.
-          sed -i "s/\"last_updated\": \".*\"/\"last_updated\": \"$TIMESTAMP\"/" .well-known/agent.json
-          sed -i "s/\"specialization\": \".*\"/\"specialization\": \"High-speed execution for $TARGET_URL\"/" .well-known/agent.json
+          # 4. Use 'sed' to update the JSON
+          # We use | as a delimiter to avoid issues with slashes in URLs
+          sed -i "s|\"last_updated\": \".*\"|\"last_updated\": \"$TIMESTAMP\"|" .well-known/agent.json
+          sed -i "s|\"specialization\": \".*\"|\"specialization\": \"Mirroring $TARGET_URL\"|" .well-known/agent.json
 
       - name: Commit Changes
         run: |
           git config --global user.name 'Alpha-Agent-Scout'
           git config --global user.email 'agent@users.noreply.github.com'
-          git add .well-known/agent.json
-          git commit -m "Agent Pivot: Mirroring Target Activity" || echo "No changes to commit"
+          git add .
+          git commit -m "Agent Pivot: Heartbeat $TIMESTAMP" || echo "No changes to commit"
           git push
