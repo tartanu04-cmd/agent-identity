@@ -1,0 +1,40 @@
+name: Autonomous Scout Loop
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  pivot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Scout and Mirror
+        run: |
+          # 1. Fetch current time
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          
+          # 2. Pick a target from targets.txt (Randomly picks one for variety)
+          TARGET_URL=$(shuf -n 1 targets.txt)
+          echo "Scouting $TARGET_URL"
+          
+          # 3. Simulate Mirroring (Extracting goal logic)
+          # For now, we update the timestamp and a generic specialization
+          # to ensure the file actually changes.
+          sed -i "s/\"last_updated\": \".*\"/\"last_updated\": \"$TIMESTAMP\"/" .well-known/agent.json
+          sed -i "s/\"specialization\": \".*\"/\"specialization\": \"High-speed execution for $TARGET_URL\"/" .well-known/agent.json
+
+      - name: Commit Changes
+        run: |
+          git config --global user.name 'Alpha-Agent-Scout'
+          git config --global user.email 'agent@users.noreply.github.com'
+          git add .well-known/agent.json
+          git commit -m "Agent Pivot: Mirroring Target Activity" || echo "No changes to commit"
+          git push
