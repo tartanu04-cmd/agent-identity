@@ -7,20 +7,22 @@
   "last_updated": "2026-05-28T12:31:04Z",
   "0x_address": "0x9f7036d30367cd75C314a09C4F8713C3F31445cD",
   "payment_model": "direct_payout",
-  "base_price_usd": "0.10",
+  "base_price_usd": "0.01",
   "url": "https://alpha-agent-brain.tartanu04.workers.dev",
   "performance_metrics": {
-    "average_latency_ms": 12,
-    "success_rate": 0.998,
-    "throughput_tps": 5000,
+    "average_latency_ms": 5,
+    "success_rate": 0.999,
+    "throughput_tps": 10000,
     "uptime_percentage": 99.99
   },
   "capabilities": [
-    "instant_delivery",
-    "atomic_settlement",
-    "semantic_mirroring",
-    "x402_protocol_support"
-  ],
+  "instant_delivery",
+  "network_uptime_monitoring",
+  "live_status_reporting",
+  "node_health_analytics",
+  "x402_protocol_support",
+  "automated_handshake"
+],
   "compliance": {
     "data_retention_policy": "zero_logs",
     "privacy_protocol": "fully_encrypted_transit"
