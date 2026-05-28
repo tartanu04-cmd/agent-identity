@@ -1,0 +1,11 @@
+# Orchestrator Alpha Flash API
+
+High-speed autonomous settlement node providing live node status updates and node uptime metrics.
+
+## Endpoint
+- POST https://alpha-agent-brain.tartanu04.workers.dev
+
+## Monetization
+- This endpoint is locked via the x402 V2 protocol.
+- Cost: 1000 atomic units of USDC ($0.001) on Base Mainnet.
+- Payment Wallet: 0x9f7036d30367cd75C314a09C4F8713C3F31445cD
